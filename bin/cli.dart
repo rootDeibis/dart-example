@@ -1,5 +1,15 @@
+import 'package:colorize/colorize.dart';
+
 void main(List<String> arguments) {
-  for (var i = 0; i < arguments.length; i++) {
-    print("${i} -> ${arguments[i]}");
+  final first = arguments.first;
+
+  if (first == "--server") {
+    if (arguments.length < 3) {
+      final usage_command = Colorize("Usage: --server [address] [port]");
+
+      print(usage_command.red());
+
+      return;
+    }
   }
 }
