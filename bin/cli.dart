@@ -1,6 +1,7 @@
 import 'package:colorize/colorize.dart';
+import 'package:cli/socket/server.dart' as socket;
 
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
   final first = arguments.first;
 
   if (first == "--server") {
@@ -10,6 +11,15 @@ void main(List<String> arguments) {
       print(usage_command.red());
 
       return;
+    } else {
+      final address = arguments[1];
+      final port = int.tryParse(arguments[2]);
+
+      if (port != null) {
+        await socket.server(address, port);
+
+        print(Colorize("Running socket server in ${address}:${port}").green());
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-void server(String address, int port) async {
+server(String address, int port) async {
   final server = await ServerSocket.bind(address, port);
 
   server.listen((event) {
