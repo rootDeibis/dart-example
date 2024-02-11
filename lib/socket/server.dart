@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-server(String address, int port) async {
+Future<ServerSocket> server(String address, int port) async {
   final server = await ServerSocket.bind(address, port);
 
   server.listen((event) {
     handle_connection(event);
   });
+
+  return server;
 }
 
 void handle_connection(Socket socket) {

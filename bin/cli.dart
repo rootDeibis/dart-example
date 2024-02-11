@@ -1,25 +1,41 @@
-import 'package:colorize/colorize.dart';
-import 'package:cli/socket/server.dart' as socket;
+import 'package:cli/cli.dart';
+import 'dart:io';
+import 'dart:convert';
+
+late ServerSocket server;
+
+Stream<String> readLine() =>
+    stdin.transform(utf8.decoder).transform(const LineSplitter());
+
+final List<String> commands = ["help", "start", "stop", "info", "clear"];
 
 void main(List<String> arguments) async {
-  final first = arguments.first;
+  printMain();
 
-  if (first == "--server") {
-    if (arguments.length < 3) {
-      final usage_command = Colorize("Usage: --server [address] [port]");
+  readLine().listen(processLine);
 
-      print(usage_command.red());
+  printShell();
+}
 
-      return;
-    } else {
-      final address = arguments[1];
-      final port = int.tryParse(arguments[2]);
+void processLine(String data) {
+  var command = data.split(" ");
 
-      if (port != null) {
-        await socket.server(address, port);
-
-        print(Colorize("Running socket server in ${address}:${port}").green());
+  if (command.length == 0) {
+    print("Uknown command, try another.");
+  } else {
+    if (commands.contains(command[0])) {
+      if (command[0] == 'help') {
+        print(commands);
+      } else if (command[0] == 'clear') {
+        for (var i = 0; i < 200; i++) {
+          print("");
+        }
+        printMain();
       }
+    } else {
+      print("Uknown command, try another or use 'help'");
     }
   }
+
+  printShell();
 }
